@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Install and configure HAproxy on your lb-01 server.
 # Configure HAproxy so that it send traffic to web-01 and web-02
 # Distribute requests using a roundrobin algorithm
@@ -5,3 +6,17 @@
 # Make sure that your servers are configured with the right hostnames:
 # [STUDENT_ID]-web-01 and [STUDENT_ID]-web-02. If not, follow this tutorial.
 
+
+apt-get install haproxy
+echo "ENABLED=1" /etc/default/haproxy
+
+defaults
+  mode http
+  timeout client 10s
+  timeout connect 5s
+  timeout server 10s 
+  timeout http-request 10s
+
+frontend myfrontend
+  bind 54.237.118.77
+  bind 100.25.102.211
