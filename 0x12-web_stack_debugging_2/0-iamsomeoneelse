@@ -6,4 +6,4 @@ if ["$#" -ne 1]; then
 fi
 # Get the username from the command line argument
 sudo -u $username whoami
-./run_as_user.sh some_username
+
