@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#pdate nginx configuration to run as nginx user
+sed -i 's/user\s*nginx;/user nginx;/' /etc/nginx/nginx.conf
+# Restart nginx to apply changes
+service nginx restart
+# Verify nginx is running as nginx user
+ps auxff | grep ngin[x]
+# Ensure nginx is listening on all active IPs on port 8080
+nc -z 08080 ; echo $?
