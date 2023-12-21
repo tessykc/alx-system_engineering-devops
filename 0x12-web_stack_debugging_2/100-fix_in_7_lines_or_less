@@ -2,5 +2,5 @@
 sed -i 's/user\s*nginx;/user
 nginx/' /etc/nginx/nginx.conf
 service nginx restart
-ps auxff | grep nign[x]
+ps auxff | pgrep nign[x]
 nc -z 0 8080
