@@ -7,5 +7,5 @@ fi
 # Get the username from the command line argument
 username=$1
 # Run the whoami command under the specified user
-sudo -u $username whoami
+sudo -u "$username whoami"
 ./run_as_user.sh some_username
