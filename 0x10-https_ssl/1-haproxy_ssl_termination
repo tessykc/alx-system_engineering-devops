@@ -1,1 +1,31 @@
+sudo apt-get update
+sudo apt-get install certbot
+sudo certbot certonly --standalone -d your-subdomain.com
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
 
+defaults
+    log global
+    mode http
+    option httplog
+    option dontlognull
+    timeout connect 5000
+    timeout client 50000
+    timeout server 50000
+
+frontend www-https
+    bind *:443 ssl crt /etc/letsencrypt/live/your-subdomain.com/fullchain.pem
+    reqadd X-Forwarded-Proto:\ https
+    acl is-holberton hdr_dom(host) -i your-subdomain.com
+    use_backend holberton-backend if is-holberton
+
+backend holberton-backend
+    server web-server 127.0.0.1:80
+sudo service haproxy restart
