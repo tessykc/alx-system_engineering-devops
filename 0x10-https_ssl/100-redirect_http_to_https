@@ -31,10 +31,5 @@ frontend www-https
 
 backend holberton-backend
     server web-server 127.0.0.1:80
-```
 
-This configuration will ensure that any HTTP traffic is automatically redirected to HTTPS with a 301 response. Make sure to replace `your-subdomain.com` with your actual subdomain. Save the configuration file and restart HAProxy:
-
-```bash
 sudo service haproxy restart
-```
