@@ -1,1 +1,39 @@
+#!/bin/bash
 
+display_info() {
+    local domain=$1
+    local subdomain=$2
+    local record_type=$3
+    local destination=$4
+    echo "The subdomain $subdomain is a $record_type record and points to $destination"
+}
+
+audit_domain() {
+    local domain=$1
+    local subdomain=$2
+
+    # Check if subdomain is provided
+    if [ -z "$subdomain" ]; then
+        subdomains=("www" "lb-01" "web-01" "web-02")
+    else
+        subdomains=("$subdomain")
+    fi
+
+    # Loop through subdomains
+    for sub in "${subdomains[@]}"; do
+        record=$(dig +short $sub.$domain)
+        record_type=$(dig +short $sub.$domain | awk 'NR==1{print $4}')
+        display_info $sub.$domain $record_type $record
+    done
+}
+
+# Check if domain argument is provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 <domain> [<subdomain>]"
+    exit 1
+fi
+
+domain=$1
+subdomain=$2
+
+audit_domain $domain $subdomain
