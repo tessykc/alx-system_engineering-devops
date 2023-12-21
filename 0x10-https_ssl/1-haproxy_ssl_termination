@@ -21,9 +21,9 @@ defaults
     timeout server 50000
 
 frontend www-https
-    bind *:443 ssl crt /etc/letsencrypt/live/your-subdomain.com/fullchain.pem
+    bind *:443 ssl crt /etc/letsencrypt/live/www.com/fullchain.pem
     reqadd X-Forwarded-Proto:\ https
-    acl is-holberton hdr_dom(host) -i your-subdomain.com
+    acl is-holberton hdr_dom(host) -i www.com
     use_backend holberton-backend if is-holberton
 
 backend holberton-backend
