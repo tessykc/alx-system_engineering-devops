@@ -9,5 +9,8 @@
 # You cannot execute your previous answer file 
 # (Do not include the name of the previous script in this one)
 # service (init) must say that nginx is not running ← for real
-
+sudo apt update
+sudo apt -y install net-tools (sudo netstat -tulpn | grep :80) || (sudo fuser -k 80/tcp ;
+echo "server {listen 80; server_name 54.144.140.244; }" | sudo tee /etc/nginx/sites-available/default > /dev/null ; sudo systemctl restart nginx)
+service nginx status | grep "not running" || echo "nginx is not running"
 
