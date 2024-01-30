@@ -52,3 +52,15 @@ if __name__ == "__main__":
 
     employee_id = int(sys.argv[1])
     get_employee_todo_progress(employee_id)
+    print(todos)  # Add this line to print the entire todos dictionary
+    employee_name = todos[0].get('username', 'DefaultName')
+    employee_name = todos[0]['user']['username']
+    if 'username' in todos[0]:
+        employee_name = todos[0]['username']
+    else:
+        employee_name = 'DefaultName'
+    if todos:
+        employee_name = todos[0].get('username', 'DefaultName')
+    else:
+        employee_name = 'DefaultName'
+
