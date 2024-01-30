@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 """
 A script using RestAPI for a given employee ID
 It returns information about his TODO list progress
