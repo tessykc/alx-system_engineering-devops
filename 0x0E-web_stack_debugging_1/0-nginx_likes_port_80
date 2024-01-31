@@ -3,7 +3,14 @@
 # Nginx must be running, and listening on port 80 of all the server’s active IPv4 IPs
 # Write a Bash script that configures a server to the above requirements
 sudo apt-get update
-sudo apt-get -y install net-tools
+sudo apt-get -y install net-tools lsof
+
+# check nginx status
+sudo systemctl status nginx 
+
+# Edit Nginx configuration
+sudo nano /etc/nginx/sites-available/default
+
 # Check if Nginx is running and listening on port 80
 nginx_status=$(sudo netstat -tulpn | grep :80)
 if [ -z "$nginx_status" ]; then
