@@ -18,7 +18,7 @@ if [ -z "$nginx_status" ]; then
   # Update Nginx configuration to listen on port 80
   sudo bash -c 'echo "server {
   listen 80;
-  server_name 54.144.140.244;
+  server_name 54.174.92.204;
   # Other Nginx configurations..
   }" > /etc/nginx/sites-available/default'
   # Restart Nginx

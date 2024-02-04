@@ -7,6 +7,13 @@ It returns information about his TODO list progress
 import requests
 import sys
 
+def get_user_info(user_id):
+    """ gets user info"""
+    user_url = f'https://api.example.com/users/{user_id}'
+    response = requests.get(user_url)
+    user_data = response.json()
+    return user_data['username']
+
 def get_employee_todo_progress(employee_id):
     """gets employee todo progress"""
     # API endpoint
@@ -22,6 +29,7 @@ def get_employee_todo_progress(employee_id):
 
         # Extract employee name
         employee_name = todos[0]['username']
+        employee_name = 'DefaultName'
 
         # Count completed and total tasks
         done_tasks = sum(1 for todo in todos if todo['completed'])
@@ -59,8 +67,4 @@ if __name__ == "__main__":
         employee_name = todos[0]['username']
     else:
         employee_name = 'DefaultName'
-    if todos:
-        employee_name = todos[0].get('username', 'DefaultName')
-    else:
-        employee_name = 'DefaultName'
-
+    
