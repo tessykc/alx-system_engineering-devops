@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 sudo nano /etc/ufw/before.rules
 #NAT table rules *nat
 :PREROUTINE ACCEPT [0:0]
