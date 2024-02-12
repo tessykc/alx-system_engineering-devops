@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 sudo nano /etc/ufw/before.rules
-# NAT table rules 
-*nat
+#NAT table rules *nat
 :PREROUTINE ACCEPT [0:0]
 -A PREROUTING -p tcp
 --dport 8080/tcp -j REDIRECT
 --to-port 80/tcp
 COMMIT
-
+sudo ufw disable
+sudo ufw enable
