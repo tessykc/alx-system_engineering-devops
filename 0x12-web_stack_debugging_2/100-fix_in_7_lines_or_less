@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# modify the nginx configuration file
+# Modify the nginx configuration file
 sed -i 's/user\s*nginx;/user nginx/' /etc/nginx/nginx.conf
 service nginx restart
 
