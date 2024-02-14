@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
-sed -i 's/user\s*nginx;/user nginx nginx;/' /etc/nginx/nginx.conf
-sed -i 's/listen\s*80;/listen 8080;/' /etc/nginx/sites-available/default
+sed -i 's/user\s*nginx;/user
+nginx/' /etc/nginx/nginx.conf
 service nginx restart
+ps auxff | pgrep nign[x]
+nc -z 0 8080
