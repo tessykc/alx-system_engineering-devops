@@ -19,6 +19,6 @@ sudo sh -c 'echo "Ceci n'\''est pas une page" > /var/www/html/404.html'
 sudo sed -i '/server_name _;/a \\nerror_page 404 /404.html;\nlocation = /404.html {\n    root /var/www/html;\n    internal;\n}' /etc/nginx/sites-available/default
 
 # Restart nginx
-sudo service nginx restart
+sudo systemctl nginx restart
 
 echo "Nginx configured for custom 404 page successfully."
