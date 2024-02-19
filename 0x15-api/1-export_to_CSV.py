@@ -17,30 +17,30 @@ def get_employee_todo_progress(employee_id):
     api_url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
 
     try:
-        # Fetch data from the API
+        """Fetch data from the API"""
         response = requests.get(api_url)
         response.raise_for_status()  # Raise an exception for bad requests
 
-        # Parse the JSON response
+        """Parse the JSON response"""
         todos = response.json()
 
-        # Extract employee name
+        """Extract employee name"""
         employee_name = get_user_info(employee_id)
 
-        # Count completed and total tasks
+        """Count completed and total tasks"""
         done_tasks = sum(1 for todo in todos if todo['completed'])
         total_tasks = len(todos)
 
-        # Display progress information
+        """Display progress information"""
         print(f"Employee {employee_name} is done with tasks ({done_tasks}/{total_tasks}):")
         print(f"{employee_name}:", done_tasks, total_tasks)
 
-        # Display titles of completed tasks
+        """Display titles of completed tasks"""
         for todo in todos:
             if todo['completed']:
                 print(f"\t{todo['title']}")
 
-        # Export data to CSV
+        """Export data to CSV"""
         csv_filename = f"{employee_id}.csv"
         with open(csv_filename, mode='w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
