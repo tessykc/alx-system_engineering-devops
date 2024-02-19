@@ -6,19 +6,54 @@
 # Configures /redirect_me as a "301 Moved Permanently".
 # Includes a custom 404 page containing "Ceci n'est pas une page".
 
-# Update package index
-sudo apt update
+# Install Nginx if not already installed
+if ! command -v nginx &> /dev/null; then
+    sudo apt update
+    sudo apt install -y nginx
+fi
 
-# Install nginx
-sudo apt install nginx -y
+# Define the custom 404 page content
+NOT_FOUND_PAGE=$(cat <<EOL
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found</title>
+</head>
+<body>
+    <h1>404 Not Found</h1>
+    <p>Ceci n'est pas une page</p>
+</body>
+</html>
+EOL
+)
 
-# Create custom 404 page with the required content
-sudo sh -c 'echo "Ceci n'\''est pas une page" > /var/www/html/404.html'
+# Create a custom 404 page file
+echo "$NOT_FOUND_PAGE" | sudo tee /usr/share/nginx/html/404.html >/dev/null
 
-# Configure nginx to use the custom 404 page
-sudo sed -i '/server_name _;/a \\nerror_page 404 /404.html;\nlocation = /404.html {\n    root /var/www/html;\n    internal;\n}' /etc/nginx/sites-available/default
+# Configure Nginx to use the custom 404 page
+sudo bash -c 'cat > /etc/nginx/sites-available/custom404' <<EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
-# Restart nginx
-sudo service nginx restart
+    server_name _;
 
-echo "Nginx configured for custom 404 page successfully."
+    error_page 404 /404.html;
+    location = /404.html {
+        root /usr/share/nginx/html;
+        internal;
+    }
+
+    # Other server configurations...
+}
+EOF
+
+# Enable the custom 404 configuration
+sudo ln -sf /etc/nginx/sites-available/custom404 /etc/nginx/sites-enabled/
+
+# Test Nginx configuration and reload the service
+sudo nginx -t && sudo systemctl reload nginx
+
+echo "Custom 404 page configured successfully."
