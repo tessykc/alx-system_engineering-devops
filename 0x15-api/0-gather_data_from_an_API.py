@@ -28,8 +28,8 @@ def get_employee_todo_progress(employee_id):
         todos = response.json()
 
         # Extract employee name
-        employee_name = todos[0]['username']
-        employee_name = 'DefaultName'
+        # Assuming you want to use the get_user_info function
+        employee_name = get_user_info(employee_id)
 
         # Count completed and total tasks
         done_tasks = sum(1 for todo in todos if todo['completed'])
@@ -60,11 +60,3 @@ if __name__ == "__main__":
 
     employee_id = int(sys.argv[1])
     get_employee_todo_progress(employee_id)
-    print(todos)  # Add this line to print the entire todos dictionary
-    employee_name = todos[0].get('username', 'DefaultName')
-    employee_name = todos[0]['user']['username']
-    if 'username' in todos[0]:
-        employee_name = todos[0]['username']
-    else:
-        employee_name = 'DefaultName'
-    

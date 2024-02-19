@@ -2,6 +2,13 @@
 import requests
 import json
 
+def get_user_info(user_id):
+    """Gets user info"""
+    user_url = f'https://jsonplaceholder.typicode.com/users/{user_id}'
+    response = requests.get(user_url)
+    user_data = response.json()
+    return user_data['username']
+
 def get_all_employees_todo():
     # API endpoint for all todos
     api_url = 'https://jsonplaceholder.typicode.com/todos'
@@ -21,20 +28,18 @@ def get_all_employees_todo():
             if user_id not in data_by_user:
                 data_by_user[user_id] = []
 
+            # Fetch user info for each user ID
+            username = get_user_info(user_id)
+
             data_by_user[user_id].append({
-                "username": todo['username'],
-                "task": todo['title'],
+                "username": username,                "task": todo['title'],
                 "completed": todo['completed']
             })
 
         # Export data to JSON
-        json_data = {}
-        for user_id, user_data in data_by_user.items():
-            json_data[user_id] = user_data
-
         json_filename = 'todo_all_employees.json'
         with open(json_filename, 'w') as json_file:
-            json.dump(json_data, json_file, indent=2)
+            json.dump(data_by_user, json_file, indent=2)
 
         print(f"Data exported to {json_filename}")
 

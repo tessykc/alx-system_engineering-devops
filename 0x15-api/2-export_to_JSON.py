@@ -3,6 +3,13 @@ import requests
 import json
 import sys
 
+def get_user_info(user_id):
+    """Gets user info"""
+    user_url = f'https://jsonplaceholder.typicode.com/users/{user_id}'
+    response = requests.get(user_url)
+    user_data = response.json()
+    return user_data['username']
+
 def get_employee_todo_progress(employee_id):
     # API endpoint
     api_url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
@@ -16,7 +23,7 @@ def get_employee_todo_progress(employee_id):
         todos = response.json()
 
         # Extract employee name
-        employee_name = todos[0]['username']
+        employee_name = get_user_info(employee_id)
 
         # Count completed and total tasks
         done_tasks = sum(1 for todo in todos if todo['completed'])
