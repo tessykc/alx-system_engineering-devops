@@ -2,17 +2,53 @@
 # Configures an Nginx server so that /redirect_me redirects to another page.
 # The redirection is configured as a "301 Moved Permanently"
 
-# Update package index
-sudo apt update
+# Install Nginx if not already installed
+if ! command -v nginx &> /dev/null; then
+    sudo apt update
+    sudo apt install -y nginx
+fi
 
-# Install nginx
-sudo apt install nginx -y
+# Define the redirection configuration
+REDIRECT_CONFIG=$(cat <<EOL
+server {
+    listen 80;
+    server_name your_domain.com;
 
-# Configure nginx for redirection
-sudo sed -i '/server_name _;/a \\nlocation /redirect_me {\n    return 301 http://example.com/destination_page;\n}' /etc/nginx/sites-available/default
+    location /redirect_me {
+        return 301 http://new_destination.com;
+    }
 
-# Restart nginx
-sudo service nginx restart
+    # Additional server configurations go here if needed
+}
+EOL
+)
 
-echo "Nginx configured for redirection successfully."
+# Create a new Nginx configuration file for redirection
+if echo "$REDIRECT_CONFIG" | sudo tee /etc/nginx/sites-available/redirect >/dev/null; then
+    echo "Nginx configuration for redirection created successfully."
+else
+    echo "Error: Failed to create Nginx configuration file."
+    exit 1
+fi
 
+# Create a symbolic link to enable the new configuration
+if sudo ln -sf /etc/nginx/sites-available/redirect /etc/nginx/sites-enabled/; then
+    echo "Nginx configuration enabled successfully."
+else
+    echo "Error: Failed to enable Nginx configuration."
+    exit 1
+fi
+
+# Test Nginx configuration and reload the service
+if sudo nginx -t; then
+    if sudo systemctl reload nginx; then
+        echo "Nginx configuration reloaded successfully."
+        echo "Redirection configured successfully."
+    else
+        echo "Error: Failed to reload Nginx configuration."
+        exit 1
+    fi
+else
+    echo "Error: Nginx configuration test failed."
+    exit 1
+fi
