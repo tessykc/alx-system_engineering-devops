@@ -7,6 +7,7 @@ It returns information about his TODO list progress
 import requests
 import sys
 
+
 def get_user_info(user_id):
     """ gets user info"""
     user_url = f'https://api.example.com/users/{user_id}'
@@ -14,11 +15,13 @@ def get_user_info(user_id):
     user_data = response.json()
     return user_data['username']
 
+
 def get_employee_todo_progress(employee_id):
     """gets employee todo progress"""
     # API endpoint
-    api_url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
-
+    api_url = (
+        f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
+    )
     try:
         # Fetch data from the API
         response = requests.get(api_url)
@@ -36,7 +39,10 @@ def get_employee_todo_progress(employee_id):
         total_tasks = len(todos)
 
         # Display progress information
-        print(f"Employee {employee_name} is done with tasks ({done_tasks}/{total_tasks}):")
+        print(
+            f"Employee {employee_name} is done with tasks
+            ({done_tasks}/{total_tasks}): "
+            )
         print(f"{employee_name}:", done_tasks, total_tasks)
 
         # Display titles of completed tasks
@@ -52,6 +58,7 @@ def get_employee_todo_progress(employee_id):
         print(f"Timeout Error: {errt}")
     except requests.exceptions.RequestException as err:
         print(f"Request Error: {err}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

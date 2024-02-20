@@ -2,6 +2,7 @@
 import requests
 import json
 
+
 def get_user_info(user_id):
     """Gets user info"""
     user_url = f'https://jsonplaceholder.typicode.com/users/{user_id}'
@@ -9,10 +10,12 @@ def get_user_info(user_id):
     user_data = response.json()
     return user_data['username']
 
+
 def get_all_employees_todo():
     """ API endpoint for all todos"""
-    api_url = 'https://jsonplaceholder.typicode.com/todos'
-
+    api_url = (
+        'https://jsonplaceholder.typicode.com/todos'
+    )
     try:
         """ Fetch data from the API"""
         response = requests.get(api_url)
@@ -51,6 +54,7 @@ def get_all_employees_todo():
         print(f"Timeout Error: {errt}")
     except requests.exceptions.RequestException as err:
         print(f"Request Error: {err}")
+
 
 if __name__ == "__main__":
     get_all_employees_todo()

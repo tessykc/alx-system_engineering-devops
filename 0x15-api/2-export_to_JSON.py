@@ -2,6 +2,8 @@
 import requests
 import json
 import sys
+"""Export data in the JSON format"""
+
 
 def get_user_info(user_id):
     """Gets user info"""
@@ -10,10 +12,12 @@ def get_user_info(user_id):
     user_data = response.json()
     return user_data['username']
 
+
 def get_employee_todo_progress(employee_id):
     """API endpoint"""
-    api_url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
-
+    api_url = (
+        f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
+    )
     try:
         """Fetch data from the API"""
         response = requests.get(api_url)
@@ -30,7 +34,9 @@ def get_employee_todo_progress(employee_id):
         total_tasks = len(todos)
 
         """Display progress information"""
-        print(f"Employee {employee_name} is done with tasks ({done_tasks}/{total_tasks}):")
+        print(
+            f"Employee {employee_name} is done with tasks
+            ({done_tasks}/{total_tasks}): ")
         print(f"{employee_name}:", done_tasks, total_tasks)
 
         """Display titles of completed tasks"""
@@ -41,11 +47,11 @@ def get_employee_todo_progress(employee_id):
         """Export data to JSON"""
         json_data = {
             "USER_ID": [
-                {"task": todo['title'], "completed": todo['completed'], "username": employee_name}
+                {"task": todo['title'], "completed":
+                 todo['completed'], "username": employee_name}
                 for todo in todos
             ]
         }
-        
         json_filename = f"{employee_id}.json"
         with open(json_filename, 'w') as json_file:
             json.dump(json_data, json_file, indent=2)
@@ -60,6 +66,7 @@ def get_employee_todo_progress(employee_id):
         print(f"Timeout Error: {errt}")
     except requests.exceptions.RequestException as err:
         print(f"Request Error: {err}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

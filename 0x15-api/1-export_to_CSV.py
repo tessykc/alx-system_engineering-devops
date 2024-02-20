@@ -2,6 +2,8 @@
 import requests
 import csv
 import sys
+"""Export data in the CSV format"""
+
 
 def get_user_info(user_id):
     """Gets user info"""
@@ -14,8 +16,9 @@ def get_user_info(user_id):
 def get_employee_todo_progress(employee_id):
     """gets employee todo progress"""
     # API endpoint
-    api_url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
-
+    api_url = (
+        f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
+    )
     try:
         """Fetch data from the API"""
         response = requests.get(api_url)
@@ -32,7 +35,9 @@ def get_employee_todo_progress(employee_id):
         total_tasks = len(todos)
 
         """Display progress information"""
-        print(f"Employee {employee_name} is done with tasks ({done_tasks}/{total_tasks}):")
+        print(
+            f"Employee {employee_name} is done with tasks
+            ({done_tasks}/{total_tasks}): ")
         print(f"{employee_name}:", done_tasks, total_tasks)
 
         """Display titles of completed tasks"""
@@ -44,10 +49,13 @@ def get_employee_todo_progress(employee_id):
         csv_filename = f"{employee_id}.csv"
         with open(csv_filename, mode='w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
-            csv_writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
+            csv_writer.writerow(
+                ["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
 
             for todo in todos:
-                csv_writer.writerow([employee_id, employee_name, todo['completed'], todo['title']])
+                csv_writer.writerow(
+                    [employee_id, employee_name, todo
+                     ['completed'], todo['title']])
 
         print(f"\nData exported to {csv_filename}")
 
