@@ -71,6 +71,7 @@ def get_employee_todo_progress(employee_id):
     except requests.exceptions.RequestException as err:
         print(f"Request Error: {err}")
 
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python script.py <employee_id>")
