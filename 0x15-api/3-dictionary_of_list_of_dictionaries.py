@@ -22,7 +22,7 @@ def get_all_employees_todo():
     try:
         """ Fetch data from the API"""
         response = requests.get(api_url)
-        response.raise_for_status()  """Raise an exception for bad requests"""
+        response.raise_for_status()  # Raise an exception for bad requests"""
 
         """ Parse the JSON response"""
         todos = response.json()

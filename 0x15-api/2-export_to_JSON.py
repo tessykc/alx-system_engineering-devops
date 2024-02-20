@@ -37,8 +37,8 @@ def get_employee_todo_progress(employee_id):
 
         """Display progress information"""
         print(
-            f"Employee {employee_name} is done with tasks
-            ({done_tasks}/{total_tasks}): ")
+            f"Employee {employee_name} is done with tasks "
+            f"({done_tasks}/{total_tasks}): ")
         print(f"{employee_name}:", done_tasks, total_tasks)
 
         """Display titles of completed tasks"""
