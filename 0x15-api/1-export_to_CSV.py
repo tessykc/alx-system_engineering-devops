@@ -1,8 +1,10 @@
 #!/usr/bin/python3
+"""
+Export data in the CSV format
+"""
 import requests
 import csv
 import sys
-"""Export data in the CSV format"""
 
 
 def get_user_info(user_id):

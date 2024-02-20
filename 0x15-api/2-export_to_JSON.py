@@ -1,8 +1,10 @@
 #!/usr/bin/python3
+"""
+Export data in the JSON format
+"""
 import requests
 import json
 import sys
-"""Export data in the JSON format"""
 
 
 def get_user_info(user_id):
