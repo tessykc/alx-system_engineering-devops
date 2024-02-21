@@ -9,39 +9,50 @@ function audit_subdomain {
     local domain="$1"
     local subdomain="$2"
     
+    # Define predefined subdomains and their corresponding IP addresses
+    declare -A predefined_ips=(
+        ["www"]="54.167.153.71"
+        ["lb-01"]="54.167.153.71"
+        ["web-01"]="54.174.92.204"
+        ["web-02"]="54.172.150.212"
+    )
+
+    # If subdomain is not provided, audit predefined subdomains
     if [ -z "$subdomain" ]; then
-        subdomains=("www" "lb-01" "web-01" "web-02")
+        subdomains=("${!predefined_ips[@]}")
     else
         subdomains=("$subdomain")
     fi
 
+    # Iterate over subdomains
     for sub in "${subdomains[@]}"; do
-        case "$sub" in
-            "www")
-                # Set the desired IP address for www
-                destination="54.167.153.71"
-                ;;
-            "lb-01")
-                # Set the desired IP address for lb-01
-                destination="54.167.153.71"
-                ;;
-            "web-01")
-                # Set the desired IP address for web-01
-                destination="54.174.92.204"
-                ;;
-            "web-02")
-                # Set the desired IP address for web-02
-                destination="54.172.150.212"
-                ;;
-            *)
-                # Use dig to dynamically obtain the IP address for other subdomains
-                record_type=$(dig +short -t A "$sub.$domain" | awk '{if (NF > 0) print "A"; else print "CNAME"}')
-                destination=$(dig +short "$sub.$domain")
-                ;;
-        esac
+        if [ "${predefined_ips[$sub]}" ]; then
+            # Use predefined IP addresses for predefined subdomains
+            destination="${predefined_ips[$sub]}"
+            record_type="A"
+        else
+            # Use dig to dynamically obtain the IP address for other subdomains
+            destination=$(dig +short "$sub.$domain")
+            if [ -z "$destination" ]; then
+                echo "Error: Subdomain $sub.$domain not found."
+                continue
+            fi
+            record_type=$(dig +short -t A "$sub.$domain" | awk '{if (NF > 0) print "A"; else print "CNAME"}')
+        fi
 
-        echo "The subdomain $sub is a A $record_type record and points to $destination"
+        echo "The subdomain $sub is a $record_type record and points to $destination"
     done
 }
 
-audit_subdomain "$1" "$2"
+# Check for mandatory arguments
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 <domain> [<subdomain>]"
+    exit 1
+fi
+
+# Retrieve arguments
+domain="$1"
+subdomain="$2"
+
+# Audit subdomain(s)
+audit_subdomain "$domain" "$subdomain" 
