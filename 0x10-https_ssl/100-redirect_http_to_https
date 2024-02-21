@@ -20,13 +20,13 @@ defaults
 frontend www-http
     bind *:80
     reqadd X-Forwarded-Proto:\ http
-    acl is-holberton hdr_dom(host) -i your-subdomain.com
+    acl is-holberton hdr_dom(host) -i www.tessykc.tech
     redirect scheme https code 301 if !is-holberton
 
 frontend www-https
-    bind *:443 ssl crt /etc/letsencrypt/live/keletech.tessykc.tech/fullchain.pem
+    bind *:443 ssl crt /etc/letsencrypt/live/tessykc.tech/fullchain.pem
     reqadd X-Forwarded-Proto:\ https
-    acl is-holberton hdr_dom(host) -i your-subdomain.com
+    acl is-holberton hdr_dom(host) -i www.tessykc.tech
     use_backend holberton-backend if is-holberton
 
 backend holberton-backend
