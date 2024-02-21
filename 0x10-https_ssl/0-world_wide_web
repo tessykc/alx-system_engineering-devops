@@ -1,14 +1,9 @@
-#!/usr/bin/env bash
-# Add the subdomain www to your domain, point it to your lb-01 IP
-# Add the subdomain lb-01 to your domain, point it to your lb-01 IP
-# Add the subdomain web-01 to your domain, point it to your web-01 IP
-# Add the subdomain web-02 to your domain, point it to your web-02 IP
-# Bash script must accept 2 arguments domain and subdomain
+#!/bin/bash
+# Function to display DNS information for a subdomain
 
-function audit_subdomain {
-    local domain="$1"
-    local subdomain="$2"
-    
+display_dns_info() {
+    domain="$1"
+    subdomain="$2"
     if [ -z "$subdomain" ]; then
         subdomains=("www" "lb-01" "web-01" "web-02")
     else
@@ -16,32 +11,24 @@ function audit_subdomain {
     fi
 
     for sub in "${subdomains[@]}"; do
-        case "$sub" in
-            "www")
-                # Set the desired IP address for www
-                destination="54.167.153.71"
-                ;;
-            "lb-01")
-                # Set the desired IP address for lb-01
-                destination="54.167.153.71"
-                ;;
-            "web-01")
-                # Set the desired IP address for web-01
-                destination="54.174.92.204"
-                ;;
-            "web-02")
-                # Set the desired IP address for web-02
-                destination="54.172.150.212"
-                ;;
-            *)
-                # Use dig to dynamically obtain the IP address for other subdomains
-                record_type=$(dig +short -t A "$sub.$domain" | awk '{if (NF > 0) print "A"; else print "CNAME"}')
-                destination=$(dig +short "$sub.$domain")
-                ;;
-        esac
-
-        echo "The subdomain $sub is a $record_type record and points to $destination"
+        dns_info=$(dig +short "$sub"."$domain")
+        if [ -n "$dns_info" ]; then
+            record_type=$(dig +short "$sub"."$domain" | awk '{print $4}')
+            destination=$(dig +short "$sub"."$domain")
+            echo "The subdomain $sub is a $record_type record and points to $destination"
+        fi
     done
 }
 
-audit_subdomain "$1" "$2"
+# Check for mandatory arguments
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 <domain> [<subdomain>]"
+    exit 1
+fi
+
+# Retrieve arguments
+domain="$1"
+subdomain="$2"
+
+# Display DNS information
+display_dns_info "$domain" "$subdomain"
