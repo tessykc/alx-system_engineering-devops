@@ -8,62 +8,45 @@ import requests
 import sys
 
 
-def get_user_info(user_id):
-    """ gets user info"""
-    user_url = f'https://api.example.com/users/{user_id}'
-    response = requests.get(user_url)
-    user_data = response.json()
-    return user_data['username']
-
-
 def get_employee_todo_progress(employee_id):
     """gets employee todo progress"""
-    # API endpoint
-    api_url = (
-        f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
-    )
+    base_url = "https://jsonplaceholder.typicode.com"
+    user_url = f"{base_url}/users/{employee_id}"
+    todos_url = f"{base_url}/todos?userId={employee_id}"
+
     try:
-        # Fetch data from the API
-        response = requests.get(api_url)
-        response.raise_for_status()  # Raise an exception for bad requests
+        user_response = requests.get(user_url)
+        todos_response = requests.get(todos_url)
+        user_data = user_response.json()
+        todos_data = todos_response.json()
+        if user_response.status_code != 200:
+            print(
+                "Failed to fetch data. Please try again later.")
+            return
+        if todos_response.status_code != 200:
+            print(
+                "Failed to fetch data. Please try again later.")
+            return
 
-        # Parse the JSON response
-        todos = response.json()
+        employee_name = user_data['name']
+        total_tasks = len(todos_data)
+        done_tasks = [task for task in todos_data if task['completed']]
+        num_done_tasks = len(done_tasks)
 
-        # Extract employee name
-        # Assuming you want to use the get_user_info function
-        employee_name = get_user_info(employee_id)
+        print(f"Employee {employee_name} is done with tasks"
+              f"({num_done_tasks}/{total_tasks}):")
+        print(f"{employee_name}: {num_done_tasks}/{total_tasks}")
 
-        # Count completed and total tasks
-        done_tasks = sum(1 for todo in todos if todo['completed'])
-        total_tasks = len(todos)
+        for task in done_tasks:
+            print(f"\t{task['title']}")
 
-        # Display progress information
-        print(
-            f"Employee {employee_name} is done with tasks "
-            f"({done_tasks}/{total_tasks}): "
-            )
-        print(f"{employee_name}:", done_tasks, total_tasks)
-
-        # Display titles of completed tasks
-        for todo in todos:
-            if todo['completed']:
-                print(f"\t{todo['title']}")
-
-    except requests.exceptions.HTTPError as errh:
-        print(f"HTTP Error: {errh}")
-    except requests.exceptions.ConnectionError as errc:
-        print(f"Error Connecting: {errc}")
-    except requests.exceptions.Timeout as errt:
-        print(f"Timeout Error: {errt}")
-    except requests.exceptions.RequestException as err:
-        print(f"Request Error: {err}")
+    except requests.RequestException as e:
+        print(f"Error: {e}")
 
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python script.py <employee_id>")
-        sys.exit(1)
-
-    employee_id = int(sys.argv[1])
-    get_employee_todo_progress(employee_id)
+        print("Usage: python script.py EMPLOYEE_ID")
+    else:
+        employee_id = int(sys.argv[1])
+        get_employee_todo_progress(employee_id)
