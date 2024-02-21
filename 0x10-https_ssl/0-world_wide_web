@@ -40,7 +40,7 @@ function audit_subdomain {
                 ;;
         esac
 
-        echo "The subdomain $sub is a $record_type record and points to $destination"
+        echo "The subdomain $sub is a A $record_type record and points to $destination"
     done
 }
 
