@@ -36,18 +36,6 @@ def get_employee_todo_progress(employee_id):
         """Count completed and total tasks"""
         done_tasks = sum(1 for todo in todos if todo['completed'])
         total_tasks = len(todos)
-
-        """Display progress information"""
-        print(
-            f"Employee {employee_name} is done with tasks "
-            f"({done_tasks}/{total_tasks}): ")
-        print(f"{employee_name}:", done_tasks, total_tasks)
-
-        """Display titles of completed tasks"""
-        for todo in todos:
-            if todo['completed']:
-                print(f"\t{todo['title']}")
-
         """Export data to CSV"""
         csv_filename = f"{employee_id}.csv"
         with open(csv_filename, mode='w', newline='') as csv_file:
