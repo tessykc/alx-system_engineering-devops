@@ -1,0 +1,28 @@
+# Ensure the holberton user exists
+user { 'holberton':
+  ensure => present,
+  shell  => '/bin/bash',  # Set the shell for the holberton user
+}
+
+# Ensure the file exists and has appropriate permissions
+file { '/path/to/your/file':
+  ensure  => present,
+  owner   => 'holberton',  # Set the owner to the holberton user
+  group   => 'holberton',  # Set the group to the holberton user
+  mode    => '0644',       # Set the file permissions
+}
+
+# Ensure SSH configuration allows login with the holberton user
+file_line { 'Allow holberton user SSH login':
+  ensure  => present,
+  path    => '/etc/ssh/sshd_config',
+  line    => 'AllowUsers holberton',
+  match   => '^#?AllowUsers',
+}
+
+# Ensure SSH service is restarted after configuration change
+service { 'ssh':
+  ensure  => running,
+  enable  => true,
+  require => File_line['Allow holberton user SSH login'],
+}
