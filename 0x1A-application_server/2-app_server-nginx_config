@@ -1,0 +1,13 @@
+server {
+    listen 80; # Listen on port 80 for both IPv4 and IPv6
+    tessykc.tech; # This is a catch-all server block
+
+    location /airbnb-onepage/ {
+        proxy_pass http://localhost:5000; # Proxy requests to the app server on port 5000
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
