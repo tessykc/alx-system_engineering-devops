@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve web_dynamic/2-hbnb.py
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/path/to/your/application/directory
+ExecStart=/usr/bin/gunicorn -b 0.0.0.0:5003 -w 3 -access-logfile /tmp/airbnb-access.log -error-logfile /tmp/airbnb-error.log 2-hbnb:app
+
+[Install]
+WantedBy=multi-user.target
+
